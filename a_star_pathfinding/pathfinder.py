@@ -82,6 +82,7 @@ class Pathfinder(Area):
                      frame,
                      areas: dict,
                      show_instance_details=True,
+                     conf=0.30,
                      bd_box=True,
                      txt=True,
                      center_point=True,
@@ -92,7 +93,7 @@ class Pathfinder(Area):
         path_tuple_of_lists = (self.path_lists)
         binary_map_1D = tool.array_2D_to_1D(matrix=self.binary_matrix_map)
 
-        predict_result = self.model.predict(source=[frame], conf=0.30, save=False)
+        predict_result = self.model.predict(source=[frame], conf=conf, save=False)
         converted_result = pd.DataFrame(predict_result[0].boxes.data).astype("float")
         for index_, row in converted_result.iterrows():
             x1, y1, x2, y2 = int(row[0]), int(row[1]), int(row[2]), int(row[3])
@@ -212,8 +213,9 @@ class Pathfinder(Area):
         return frame
 
     def show_obstacle_zones(self, frame, areas: dict, cls_ids: list[str], none_obs=None, zones_color=(0, 0, 255), thickness=2):
+        cls_ids_len = len(cls_ids)
         if none_obs is None:
-            for key_ind in range(len(cls_ids)):
+            for key_ind in range(cls_ids_len):
                 index = 0
                 for key, value in areas.items():
                     if self.mapping_instance[index] == cls_ids[key_ind]:

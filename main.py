@@ -13,9 +13,9 @@ def main() -> None:
     pf = Pathfinder(
             cap=cv2.VideoCapture("inference/video/sample.mp4"),
             frame_name="Pathfinding with YOLOv8",
-            weights_path="weights/yolov8_weights.pt",
+            weights_path="weights/best.pt",
             coco_file_path="utils/coco.names",
-            max_frame_rows_and_cols=(5, 7),
+            max_frame_rows_and_cols=(5*2, 7*2),
             entire_area_dimension=entire_zone_area
         )
 
@@ -42,9 +42,9 @@ def main() -> None:
 
         target_area = (6, 3) # for demo purpose
         areas = pf.area.get_areas_grid_coordinates(frame_width=new_width, frame_height=new_height)
-        transform_frame, mapping_instance, matrix_binary_map  = pf.track_object(frame=transform_frame, areas=areas)
+        transform_frame, mapping_instance, matrix_binary_map = pf.track_object(frame=transform_frame, areas=areas, conf=0.40)
         start_area = pf.astarpathfinding.get_start_area(matrix=mapping_instance, key_cls=pf.class_index["person"])
-        created_path = pf.astarpathfinding.create_path(matrix=matrix_binary_map, start_area=start_area, target_area=target_area)
+        created_path = pf.astarpathfinding.create_path(matrix=matrix_binary_map, start_area=start_area, target_area=target_area, diagonal_movement="never") # sample only
         
 
         # Optional

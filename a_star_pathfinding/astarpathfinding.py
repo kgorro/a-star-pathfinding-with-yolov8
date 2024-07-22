@@ -23,7 +23,7 @@ class AStarPathfinding:
         instance_loc = tool.find_loc(matrix=matrix, keyword=key_cls, rows=self.max_rows, cols=self.max_cols)
         return instance_loc
     
-    def create_path(self, matrix: list, start_area: tuple, target_area: tuple, display_demo=True) -> (list | None):
+    def create_path(self, matrix: list, start_area: tuple, target_area: tuple, diagonal_movement="always", display_demo=True) -> (list | None):
         if target_area is None or start_area is None:
             return
         
@@ -35,7 +35,18 @@ class AStarPathfinding:
         start_area = grid.node(start_x, start_y)
         end_area = grid.node(end_x, end_y)
 
-        finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
+        if "never" == diagonal_movement:
+            finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
+        elif "always" == diagonal_movement:
+            finder = AStarFinder(diagonal_movement=DiagonalMovement.always)
+        elif "if_at_most_one_obstacle" == diagonal_movement:
+            finder = AStarFinder(diagonal_movement=DiagonalMovement.if_at_most_one_obstacle)
+        elif "only_when_no_obstacle" == diagonal_movement:
+            finder = AStarFinder(diagonal_movement=DiagonalMovement.only_when_no_obstacle)
+        else:
+            print("Invalid diagonal_movement!")
+            exit()
+        
         path, runs = finder.find_path(start_area, end_area, grid)
 
         if display_demo:
