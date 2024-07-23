@@ -41,16 +41,18 @@ def main() -> None:
         
 
         target_area = (6, 3) # for demo purpose
-        areas = pf.area.get_areas_grid_coordinates(frame_width=new_width, frame_height=new_height)
+        center_areas, areas = pf.area.get_areas_grid_coordinates(frame_width=new_width, frame_height=new_height)
         transform_frame, mapping_instance, matrix_binary_map = pf.track_object(frame=transform_frame, areas=areas, conf=0.40)
         start_area = pf.astarpathfinding.get_start_area(matrix=mapping_instance, key_cls=pf.class_index["person"])
-        created_path = pf.astarpathfinding.create_path(matrix=matrix_binary_map, start_area=start_area, target_area=target_area, diagonal_movement="never") # sample only
+        created_path = pf.astarpathfinding.create_path(matrix=matrix_binary_map, start_area=start_area, target_area=target_area, diagonal_movement="always") # sample only
         
 
         # Optional
         transform_frame = pf.show_grid_zones(frame=transform_frame, areas=areas)
         transform_frame = pf.show_obstacle_zones(frame=transform_frame, areas=areas, cls_ids=[pf.class_index["table"]])
         transform_frame = pf.astarpathfinding.show_path(frame=transform_frame, start_area=start_area, target_area=target_area, areas=areas, path=created_path)
+        transform_frame = pf.show_1s_and_0s_map(frame=transform_frame, center_areas=center_areas)
+        
         cv2.imshow(pf.frame_name, transform_frame)
         frame = pf.show_whole_area_zone(frame=frame)
         cv2.imshow("Normal Frame", frame)

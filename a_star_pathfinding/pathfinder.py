@@ -242,6 +242,15 @@ class Pathfinder(Area):
             index += 1
         return frame
 
+    def show_1s_and_0s_map(self, frame, center_areas: dict, fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.5, textThickness=2, color=(255, 255, 255)):
+        binary_map_1D = tool.array_2D_to_1D(matrix=self.binary_matrix_map)
+        index = 0
+        for key, centers_point in center_areas.items():
+            cv2.putText(frame, f"{binary_map_1D[index]}", (centers_point[0], centers_point[1]), fontFace=fontFace, fontScale=fontScale, color=color, thickness=textThickness)
+            index += 1
+
+        return frame
+
     def CV_END(self) -> None:
         self.cap.release()
         cv2.destroyAllWindows()
