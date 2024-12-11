@@ -6,6 +6,7 @@ import pandas as pd
 
 from . import tool
 from .astarpathfinding import AStarPathfinding
+from .tabusearchpathfinding import TabuSearchPathfinding
 from .area import Area
 
 class Pathfinder(Area):
@@ -20,6 +21,7 @@ class Pathfinder(Area):
             ) -> None:
         self.max_frame_row, self.max_frame_col = max_frame_rows_and_cols
         self.astarpathfinding = AStarPathfinding(max_rows=self.max_frame_row, max_cols=max_frame_rows_and_cols[1])
+        self.tabusearchpathfinding = TabuSearchPathfinding(max_rows=self.max_frame_row, max_cols=max_frame_rows_and_cols[1], tabu_tenure=5)
         self.area = Area(frame_grid_max_rows=self.max_frame_row, frame_grid_max_cols=self.max_frame_col)
 
         # cv2
